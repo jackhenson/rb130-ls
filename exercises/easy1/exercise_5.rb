@@ -32,17 +32,31 @@
 def decipher(name)
   alphabet = ('a'..'z').to_a
   result = name.chars.map do |letter|
-    # return ' ' if letter == ' '
-    new_index = (alphabet.index(letter.downcase) + 13)
-    new_index -= 26 if (new_index > 25)
-    if letter.upcase == letter
-      alphabet[new_index].upcase
-    else
-      alphabet[new_index]
-    end
+    next ' ' if letter == ' '
+    next '-' if letter == '-'
+    new_index = (alphabet.index(letter.downcase) - 13)
+    letter.upcase == letter ? alphabet[new_index].upcase : alphabet[new_index]
   end
 
   result.join
 end
                 
 p decipher("Nqn Ybirynpr")
+p decipher('Tenpr Ubccre')
+p decipher('Nqryr Tbyqfgvar')
+p decipher('Nyna Ghevat')
+p decipher('Puneyrf Onoontr')
+p decipher('Noqhyynu Zhunzznq ova Zhfn ny-Xujnevmzv')
+p decipher('Wbua Ngnanfbss')
+p decipher('Ybvf Unvog')
+p decipher('Pynhqr Funaaba')
+p decipher('Fgrir Wbof')
+p decipher('Ovyy Tngrf')
+p decipher('Gvz Orearef-Yrr')
+p decipher('Fgrir Jbmavnx')
+p decipher('Xbaenq Mhfr')
+p decipher('Fve Nagbal Ubner')
+p decipher('Zneiva Zvafxl')
+p decipher('Lhxvuveb Zngfhzbgb')
+p decipher('Unllvz Fybavzfxv')
+p decipher('Tregehqr Oynapu')
