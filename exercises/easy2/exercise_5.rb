@@ -24,16 +24,11 @@
 
 def drop_while(arr)
   result = arr.dup
-  arr.each_with_index do |e, idx|
-    if yield(e)
-      result.slice!(0..idx)
-      return
-    end
-  end
+  arr.each { |e| yield(e) ? result.delete_at(0) : break }
   result
 end
 
-#p drop_while([1, 3, 5, 6]) { |value| value.odd? } == [6]
+p drop_while([1, 3, 5, 6]) { |value| value.odd? } == [6]
 p drop_while([1, 3, 5, 6]) { |value| value.even? } == [1, 3, 5, 6]
 p drop_while([1, 3, 5, 6]) { |value| true } == []
 p drop_while([1, 3, 5, 6]) { |value| false } == [1, 3, 5, 6]
