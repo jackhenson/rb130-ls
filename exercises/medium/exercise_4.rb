@@ -34,3 +34,20 @@
 #   a way that it ignores the first two elements, and
 #   groups all remaining elements as a raptors array.
 
+def types(birds)
+  yield(birds)
+end
+
+birds = %w(raven finch hawk eagle)
+
+# result = types(birds) do |arr|
+#           raven, finch, *raptors = arr
+#           raptors
+#          end
+
+# p result
+
+# Provided solution:
+types(birds) do |_, _, *raptors|
+  puts "Raptors: #{raptors.join(', ')}."
+end
