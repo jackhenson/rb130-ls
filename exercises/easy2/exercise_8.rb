@@ -19,22 +19,33 @@
 def max_by(arr)
   return nil if arr.empty?
 
-  max_result = 0
-  max_element = arr.first
-  counter = 0
-
-  while counter < arr.size
-    current_element = arr[counter]
-    result = yield(current_element)
-    if result.ord > max_result.ord
-      max_element = current_element
-      max_result = result
-    end
-    counter += 1
+  result_index = 0
+  arr.each_with_index do |e, i|
+    result_index = i if yield(e) > yield(arr[result_index])
   end
 
-  max_element
+  arr[result_index]
 end
+
+# def max_by(arr)
+#   return nil if arr.empty?
+
+#   max_result = 0
+#   max_element = arr.first
+#   counter = 0
+
+#   while counter < arr.size
+#     current_element = arr[counter]
+#     result = yield(current_element)
+#     if result.ord > max_result.ord
+#       max_element = current_element
+#       max_result = result
+#     end
+#     counter += 1
+#   end
+
+#   max_element
+# end
 
 p max_by([1, 5, 3]) { |value| value + 2 } == 5
 p max_by([1, 5, 3]) { |value| 9 - value } == 1
