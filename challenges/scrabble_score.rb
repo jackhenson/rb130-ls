@@ -44,13 +44,22 @@ POINT_VALUES = { ['a', 'e', 'i', 'o', 'u', 'l', 'n', 'r', 's', 't'] => 1,
                  ['q', 'z'] => 10
                 }
 
+# p POINT_VALUES.keys
+# p POINT_VALUES[["k"]]
+
 class Scrabble
   def initialize(word)
     @word = word
   end
 
   def score
-    @word.chars.map { |c| letter_score(c) }.sum
+    return 0 if @word.nil?
+    return 0 unless @word.downcase.match? /[a-z]/
+    @word.downcase.chars.map { |c| letter_score(c) }.sum
+  end
+
+  def self.score(word)
+    self.new(word).score
   end
 
   private
