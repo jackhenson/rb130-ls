@@ -12,15 +12,16 @@
 # of either 3 or 5, we get 3, 5, 6, 9, 10, 12, 15,
 # and 18. The sum of these multiples is 78.
 
+
 class SumOfMultiples
-  attr_reader :max, :set
+  attr_reader :set
 
   def initialize(*set)
-    @set = set
+    @set = (set.size > 0) ? set : [3, 5]
   end
 
   def self.to(max)
-    self.new(3, 5).to(max)
+    self.new.to(max)
   end
 
   def to(max)
@@ -29,11 +30,14 @@ class SumOfMultiples
       multiplier = 1
       loop do
         multiple = num * multiplier
-        break if multiple > max
+        break if multiple >= max
         result << multiple
         multiplier += 1
       end
     end
-    result.sum
+    # filter out duplicates and return sum
+    result.uniq.sum
   end
 end
+
+p SumOfMultiples.to(100)
