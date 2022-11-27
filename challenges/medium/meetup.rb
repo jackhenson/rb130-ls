@@ -40,15 +40,6 @@
 require 'date'
 
 class Meetup
-  WEEKDAYS = { "Sunday" => 0,
-               "Monday" => 1,
-               "Tuesday" => 2,
-               "Wednesday" => 3,
-               "Thursday" => 4,
-               "Friday" => 5,
-               "Saturday" => 6,
-             }
-
   DESCRIPTOR_INDEX = { "first" => 0,
                        "second" => 1,
                        "third" => 2,
@@ -57,34 +48,61 @@ class Meetup
                        "last" => -1
                       }
 
-  NUM_OF_DAYS_IN_MONTH = { ["January", "March", "May", "July", "August", "October", "December"] => 31,
-                           ["April", "June", "September", "November"] => 30,
-                           [] 
+  NUM_OF_DAYS_IN_MONTH = { [1, 3, 5, 7, 8, 10, 12] => 31,
+                           [4, 6, 9, 11] => 30,
+                           [2] => 28,
+                         }
 
-  }
+  TEENTH_DAYS = [13, 14, 15, 16, 17, 18, 19]
 
   attr_reader :year, :month
   
   def initialize(year, month)
     @year = year
-    @month = month.capitalize
+    @month = month
   end
 
   def day(weekday, descriptor)
     weekday = weekday.downcase
     descriptor = descriptor.downcase
 
-    days_of_given_weekday = []
-    (1..29).each do |n|
+    result = case descriptor
+             when "teenth"
+               match_teenth_day(weekday)
+             else
+              days_of_given_weekday(weekday)[DESCRIPTOR_INDEX[descriptor]]
+             end
+
+    return nil if result.nil?
+    Date.new(year, month, result)
+  end
+
+  private
+
+  def days_of_given_weekday(weekday)
+    days = []
+    (1..days_in_month).each do |n|
       date = Date.new(year, month, n)
-      days_of_given_weekday << n if date.send("#{weekday}?")
+      days << n if date.send("#{weekday}?")
     end
 
-    result_day = days_of_given_weekday[DESCRIPTOR_INDEX[descriptor]]
+    days
+  end
 
-    Date.new(year, month, result_day)
+  def days_in_month
+    return 29 if month == 2 && Date.leap?(year)
+    NUM_OF_DAYS_IN_MONTH.keys.each do |k|
+      return NUM_OF_DAYS_IN_MONTH[k] if k.include? month
+    end
+  end
+
+  def match_teenth_day(weekday)
+    TEENTH_DAYS.select do |n|
+      Date.new(year, month, n).send("#{weekday}?")
+    end.first
   end
 end
 
 # Meetup.new(2013, 3).day('Monday', 'first')
-Meetup.new(2013, 4).day('monday', 'FIRST')
+# Meetup.new(2013, 4).day('monday', 'FIRST')
+Meetup.new(2015, 10).day('Wednesday', 'fifth')
