@@ -20,7 +20,7 @@ class Clock
 
   def self.at(h, m=0)
     h = 24 if h == 0 && m == 0
-    self.new(h, m)
+    new(h, m)
   end
 
   def initialize(h, m)
