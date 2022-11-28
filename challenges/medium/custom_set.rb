@@ -18,3 +18,61 @@
 
 # For simplicity, you may assume that all elements of a
 # set must be numbers.
+
+class CustomSet
+  attr_reader :set
+
+  def initialize(arr=[])
+    @set = arr
+  end
+
+  def empty?
+    set.empty?
+  end
+
+  def contains?(element)
+    set.include?(element)
+  end
+
+  def subset?(other_set)
+    return true if other_set.set == set || self.empty?
+    set.all? do |e|
+      other_set.set.include? e
+    end
+  end
+
+  def disjoint?(other_set)
+    set.none? do |e|
+      other_set.set.include? e
+    end
+  end
+
+  def intersect?(other_set)
+    !disjoint?(other_set)
+  end
+
+  def intersection(other_set)
+    intersecting_elements = set.select { |e| other_set.set.include? e }
+    CustomSet.new(intersecting_elements)
+  end
+
+  def difference(other_set)
+    different_elements = set.select { |e| other_set.set.none? e }
+    CustomSet.new(different_elements)
+  end
+
+  def union(other_set)
+    combined_elements = set + other_set.set
+    CustomSet.new(combined_elements)
+  end
+
+  def eql?(other_set)
+    set.uniq.sort == other_set.set.uniq.sort
+  end
+  alias_method :==, :eql?
+
+  def add(element)
+    set.push(element)
+    self.class.new(set)
+  end
+end
